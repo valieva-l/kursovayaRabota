@@ -2,6 +2,15 @@ import java.util.Random;
 
 public class Main {
 
+    public static void main(String[] args) {
+        initEmployees();
+        print();
+        System.out.println("Сумма затрат на ЗП " + salaryCosts());
+        System.out.println("Cотрудник с минимальной ЗП " + salaryMin());
+        System.out.println("Cотрудник c максимальной ЗП " + salaryMax());
+        System.out.println("Cреднее значение зарплат " + salaryAverage());
+        fullName();
+    }
     private final static Random RANDOM = new Random();
     private final static String[] NAME = {"Мария", "Анна", "Екатерина", "Ольга", "Наталья", "Татьяна", "Марина", "Светлана"};
     private final static String[] SURNAME = {"Петрова", "Васильева", "Кузнецова", "Федорова", "Ковалёва", "Лебедева", "Зайцева", "Пономарева"};
@@ -17,15 +26,6 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        initEmployees();
-        print();
-        System.out.println("Сумма затрат на ЗП " + salaryCosts());
-        System.out.println("Cотрудник с минимальной ЗП " + salaryMin());
-        System.out.println("Cотрудник c максимальной ЗП " + salaryMax());
-        System.out.println("Cреднее значение зарплат " + salaryAverage());
-        fullName();
-    }
 
     private static void print() {
         for (Employee employee : EMPLOYEE) {
@@ -37,7 +37,9 @@ public class Main {
     private static int salaryCosts() {
         int sum = 0;
         for (Employee employee : EMPLOYEE) {
-            sum += employee.getSalary();
+            if (employee != null) {
+                sum += employee.getSalary();
+            }
         }
         return sum;
     }
@@ -45,8 +47,10 @@ public class Main {
     private static Employee salaryMin() {
         Employee salaryMinEmployee = null;
         for (Employee employee : EMPLOYEE) {
-            if (salaryMinEmployee == null || employee.getSalary() < salaryMinEmployee.getSalary()){
-                salaryMinEmployee = employee;
+            if (employee != null) {
+                if (salaryMinEmployee == null || employee.getSalary() < salaryMinEmployee.getSalary()) {
+                    salaryMinEmployee = employee;
+                }
             }
         }
         return salaryMinEmployee;
@@ -63,12 +67,27 @@ public class Main {
     }
 
     private static double salaryAverage() {
-        return (double) salaryCosts() / EMPLOYEE.length;
+        int count = 0;
+        for (Employee employee : EMPLOYEE) {
+            if (employee != null) {
+                count++;
+            }
+        }
+        if (count == 0) {
+            return 0;
+        }
+        return (double) salaryCosts() / count;
     }
 
     private static void fullName() {
         for (Employee employee : EMPLOYEE) {
-            System.out.println(employee.getFullName());
+            String fullName = employee.getFullName();
+            if (fullName != null) {
+                System.out.println(employee.getFullName());
+            } else {
+                System.out.println("ФИО отсутствует");
+            }
+
         }
     }
 }
